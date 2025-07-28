@@ -1,185 +1,48 @@
 @using TaskFlowPro.Web.Services
 @using TaskFlowPro.Web.Components.UI
-@inject IUIStateService UIState
 @namespace TaskFlowPro.Web.Features.Auth.Components
+@inherits RegisterFormBase
 
-<div class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-    <Card HasShadow="true" 
-          IsGlass="true" 
-          IsAnimated="true"
-          CustomClass="w-full max-w-md shadow-2xl border-0 bg-white/80 backdrop-blur-sm animate-scaleIn">
-        <Header>
-            <div class="text-center space-y-4">
-                <div class="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg">
-                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                        <div class="w-4 h-4 bg-gradient-to-br from-primary to-secondary rounded-sm"></div>
-                    </div>
-                </div>
-                <div>
-                    <h1 class="text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                        TaskFlow Pro
-                    </h1>
-                    <p class="text-base text-muted-foreground">
-                        Create your account to get started
-                    </p>
-                </div>
-            </div>
-        </Header>
-        
-        <ChildContent>
-            <form @onsubmit="HandleSubmit" @onsubmit:preventDefault="true" class="space-y-6">
-                @if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    <div class="border border-status-urgent/20 bg-status-urgent/5 rounded-md p-3 animate-fadeInUp">
-                        <p class="text-status-urgent text-sm">
-                            <i class="fas fa-exclamation-circle mr-2"></i>
-                            @errorMessage
-                        </p>
-                    </div>
-                }
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <Input Id="firstName"
-                           Label="First Name"
-                           @bind-Value="formData.FirstName"
-                           Placeholder="John"
-                           LeftIcon="fas fa-user"
-                           IsRequired="true" />
-                    
-                    <Input Id="lastName"
-                           Label="Last Name"
-                           @bind-Value="formData.LastName"
-                           Placeholder="Doe"
-                           LeftIcon="fas fa-user"
-                           IsRequired="true" />
-                </div>
-                
-                <Input Id="email"
-                       Label="Email"
-                       Type="email"
-                       @bind-Value="formData.Email"
-                       Placeholder="john.doe@company.com"
-                       LeftIcon="fas fa-envelope"
-                       IsRequired="true"
-                       Size="Input.InputSize.Large" />
-                
-                <Input Id="password"
-                       Label="Password"
-                       Type="@(showPassword ? "text" : "password")"
-                       @bind-Value="formData.Password"
-                       Placeholder="Create a strong password"
-                       LeftIcon="fas fa-lock"
-                       RightIcon="@(showPassword ? "fas fa-eye-slash" : "fas fa-eye")"
-                       OnRightIconClick="TogglePasswordVisibility"
-                       IsRequired="true"
-                       Size="Input.InputSize.Large" />
-                
-                <Input Id="confirmPassword"
-                       Label="Confirm Password"
-                       Type="@(showConfirmPassword ? "text" : "password")"
-                       @bind-Value="formData.ConfirmPassword"
-                       Placeholder="Confirm your password"
-                       LeftIcon="fas fa-lock"
-                       RightIcon="@(showConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye")"
-                       OnRightIconClick="ToggleConfirmPasswordVisibility"
-                       IsRequired="true"
-                       Size="Input.InputSize.Large" />
-                
-                <Button Type="submit" 
-                        Variant="Button.ButtonVariant.Primary"
-                        Size="Button.ButtonSize.Large"
-                        IsLoading="isLoading"
-                        class="w-full h-12 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02]">
-                    @if (isLoading)
-                    {
-                        <span>Creating account...</span>
-                    }
-                    else
-                    {
-                        <span>Create Account</span>
-                    }
-                </Button>
-            </form>
-            
-            <div class="mt-6 text-center">
-                <p class="text-sm text-muted-foreground">
-                    Already have an account?
-                    <button @onclick="OnSwitchToLogin"
-                            class="text-primary hover:text-primary/80 transition-colors duration-200 underline underline-offset-4 ml-1">
-                        Sign in
-                    </button>
-                </p>
-            </div>
-        </ChildContent>
-    </Card>
+@*
+ESTUDIANTE: Formulario de Registro
+
+TAREA: Diseñar y implementar el formulario de registro usando los componentes UI disponibles
+
+COMPONENTES DISPONIBLES:
+- <Card> - Para el contenedor principal
+- <Input> - Para los campos del formulario
+- <Button> - Para el botón de envío
+
+REQUISITOS:
+1. Crear un formulario centrado en la pantalla
+2. Incluir campos para: FirstName, LastName, Email, Password, ConfirmPassword
+3. Mostrar botón de envío con estado de carga
+4. Manejar errores de validación
+5. Validar que las contraseñas coincidan
+6. Diseño responsive y atractivo
+
+CAMPOS REQUERIDOS:
+- First Name (fas fa-user)
+- Last Name (fas fa-user)
+- Email (fas fa-envelope)
+- Password (fas fa-lock) - con toggle de visibilidad
+- Confirm Password (fas fa-lock) - con toggle de visibilidad
+
+PISTA: Usa grid para organizar First Name y Last Name en la misma fila:
+- <div class="grid grid-cols-2 gap-4">
+
+TODO: ESTUDIANTE - Implementar el diseño del formulario aquí
+*@
+
+<div class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center mb-8">Create Account</h1>
+
+        @* TODO: ESTUDIANTE - Implementar formulario de registro aquí *@
+        <p class="text-center text-gray-600">
+            Implementar formulario de registro usando componentes Card, Input y Button
+        </p>
+    </div>
 </div>
 
-@code {
-    [Parameter] public EventCallback OnSwitchToLogin { get; set; }
-    
-    private RegisterFormData formData = new();
-    private bool showPassword = false;
-    private bool showConfirmPassword = false;
-    private bool isLoading = false;
-    private string errorMessage = "";
 
-    private async Task HandleSubmit()
-    {
-        errorMessage = "";
-        
-        // Validate form
-        if (string.IsNullOrWhiteSpace(formData.FirstName) ||
-            string.IsNullOrWhiteSpace(formData.LastName) ||
-            string.IsNullOrWhiteSpace(formData.Email) ||
-            string.IsNullOrWhiteSpace(formData.Password))
-        {
-            errorMessage = "Please fill in all required fields";
-            return;
-        }
-        
-        if (formData.Password != formData.ConfirmPassword)
-        {
-            errorMessage = "Passwords do not match";
-            return;
-        }
-        
-        isLoading = true;
-        
-        try
-        {
-            // Simulate API call
-            await Task.Delay(1500);
-            
-            // Mock registration success
-            UIState.ShowSuccess("Account created successfully! Please sign in.");
-            await OnSwitchToLogin.InvokeAsync();
-        }
-        catch (Exception)
-        {
-            errorMessage = "An error occurred during registration";
-        }
-        finally
-        {
-            isLoading = false;
-        }
-    }
-
-    private void TogglePasswordVisibility()
-    {
-        showPassword = !showPassword;
-    }
-
-    private void ToggleConfirmPasswordVisibility()
-    {
-        showConfirmPassword = !showConfirmPassword;
-    }
-
-    private class RegisterFormData
-    {
-        public string FirstName { get; set; } = "";
-        public string LastName { get; set; } = "";
-        public string Email { get; set; } = "";
-        public string Password { get; set; } = "";
-        public string ConfirmPassword { get; set; } = "";
-    }
-}

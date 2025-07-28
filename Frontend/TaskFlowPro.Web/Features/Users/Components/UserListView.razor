@@ -1,170 +1,48 @@
 @using TaskFlowPro.Web.Services
 @using TaskFlowPro.Web.Components.UI
-@inject IUIStateService UIState
 @namespace TaskFlowPro.Web.Features.Users.Components
+@inherits UserListViewBase
 
-<div class="space-y-6 animate-fadeInUp">
-    <!-- Header Section -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div class="flex items-center gap-3 animate-slideInLeft">
-            <div class="icon-container">
-                <i class="fas fa-users text-white"></i>
-            </div>
-            <div>
-                <h1 class="page-title">User Management</h1>
-                <div class="flex items-center gap-2">
-                    <p class="page-subtitle">Manage system users and permissions</p>
-                    <i class="fas fa-sparkles w-3 h-3 text-accent animate-pulse"></i>
-                </div>
-            </div>
-        </div>
-        
-        <Button Variant="Button.ButtonVariant.Primary"
-                OnClick="HandleCreateUser"
-                Icon="fas fa-plus"
-                class="create-button">
-            Add User
-        </Button>
-    </div>
+@*
+ESTUDIANTE: Vista de lista de usuarios
 
-    <!-- Users Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach (var (user, index) in users.Select((u, i) => (u, i)))
-        {
-            <Card HasShadow="true"
-                  IsAnimated="true"
-                  CustomClass="hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
-                <ChildContent>
-                    <div class="flex items-start gap-4">
-                        <Avatar Initials="@GetUserInitials(user)" 
-                                Size="Avatar.AvatarSize.Large"
-                                ShowOnlineIndicator="true"
-                                IsOnline="true" />
-                        
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-semibold text-lg">@user.FirstName @user.LastName</h3>
-                            <p class="text-sm text-muted-foreground">@user.Email</p>
-                            
-                            <div class="mt-2">
-                                <Badge Variant="@GetRoleBadgeVariant(user.Role)" 
-                                       IsAnimated="true">
-                                    @GetRoleDisplayName(user.Role)
-                                </Badge>
-                            </div>
-                            
-                            @if (!string.IsNullOrEmpty(user.TeamName))
-                            {
-                                <div class="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                                    <i class="fas fa-users"></i>
-                                    <span>@user.TeamName</span>
-                                </div>
-                            }
-                            
-                            <div class="mt-4 flex gap-2">
-                                <Button Variant="Button.ButtonVariant.Ghost"
-                                        Size="Button.ButtonSize.Small"
-                                        OnClick="() => HandleEditUser(user.Id)"
-                                        Icon="fas fa-edit"
-                                        class="hover:bg-primary/10 hover:text-primary">
-                                    Edit
-                                </Button>
-                                
-                                @if (user.Role != "global_admin")
-                                {
-                                    <Button Variant="Button.ButtonVariant.Ghost"
-                                            Size="Button.ButtonSize.Small"
-                                            OnClick="() => HandleDeleteUser(user.Id)"
-                                            Icon="fas fa-trash"
-                                            class="hover:bg-status-urgent/10 hover:text-status-urgent">
-                                        Delete
-                                    </Button>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </ChildContent>
-            </Card>
-        }
-    </div>
-    
-    @if (!users.Any())
-    {
-        <EmptyState Icon="fas fa-users"
-                  Title="No users found"
-                  Description="Start by adding your first user to the system"
-                  Size="EmptyState.EmptyStateSize.Large">
-            <ChildContent>
-                <div class="mt-6">
-                    <Button Variant="Button.ButtonVariant.Primary"
-                            OnClick="HandleCreateUser"
-                            Icon="fas fa-plus">
-                        Add First User
-                    </Button>
-                </div>
-            </ChildContent>
-        </EmptyState>
-    }
+TAREA: Diseñar y implementar la lista de usuarios usando los componentes UI disponibles
+
+COMPONENTES DISPONIBLES:
+- <Card> - Para cada usuario
+- <Avatar> - Para foto/iniciales del usuario
+- <Badge> - Para mostrar el rol
+- <Button> - Para acciones (Create, Edit, Delete)
+- <EmptyState> - Cuando no hay usuarios
+
+DATOS DISPONIBLES en 'users':
+- user.FirstName, user.LastName
+- user.Email
+- user.Role (usar GetRoleBadgeVariant() y GetRoleDisplayName())
+- user.TeamName
+- user.Id
+
+MÉTODOS DISPONIBLES:
+- GetUserInitials(user) - para Avatar
+- HandleCreateUser() - para botón crear
+- HandleEditUser(userId) - para botón editar
+- HandleDeleteUser(userId) - para botón eliminar
+
+ESTRUCTURA SUGERIDA:
+1. Header con título y botón "Add User"
+2. Grid de tarjetas para cada usuario
+3. EmptyState cuando users.Any() es false
+
+TODO: ESTUDIANTE - Implementar el diseño de la lista de usuarios aquí
+*@
+
+<div class="p-6">
+    <h1 class="text-2xl font-bold mb-6">Users Management</h1>
+
+    @* TODO: ESTUDIANTE - Implementar lista de usuarios aquí *@
+    <p class="text-gray-600">
+        Implementar lista de usuarios usando componentes Card, Avatar, Badge y Button
+    </p>
 </div>
 
-@code {
-    private List<MockUser> users = new();
 
-    protected override void OnInitialized()
-    {
-        LoadUsers();
-    }
-
-    private void LoadUsers()
-    {
-        users = MockDataService.GetMockUsers();
-    }
-
-    private string GetUserInitials(MockUser user)
-    {
-        return $"{user.FirstName.FirstOrDefault()}{user.LastName.FirstOrDefault()}";
-    }
-
-    private Badge.BadgeVariant GetRoleBadgeVariant(string role)
-    {
-        return role switch
-        {
-            "global_admin" => Badge.BadgeVariant.Danger,
-            "team_leader" => Badge.BadgeVariant.Warning,
-            "team_member" => Badge.BadgeVariant.Primary,
-            _ => Badge.BadgeVariant.Default
-        };
-    }
-
-    private string GetRoleDisplayName(string role)
-    {
-        return role switch
-        {
-            "global_admin" => "Global Admin",
-            "team_leader" => "Team Leader",
-            "team_member" => "Team Member",
-            _ => role
-        };
-    }
-
-    private void HandleCreateUser()
-    {
-        UIState.NavigateTo("user-form");
-    }
-
-    private void HandleEditUser(string userId)
-    {
-        UIState.NavigateTo("user-form");
-        UIState.ShowInfo($"Editing user: {userId}");
-    }
-
-    private void HandleDeleteUser(string userId)
-    {
-        var user = users.FirstOrDefault(u => u.Id == userId);
-        if (user != null)
-        {
-            users.Remove(user);
-            UIState.ShowSuccess($"User {user.FirstName} {user.LastName} deleted successfully");
-            StateHasChanged();
-        }
-    }
-}

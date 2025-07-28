@@ -1,10 +1,15 @@
 @page "/users"
+@using TaskFlowPro.Web.Features.Users.Components
 
-<h1 class="text-3xl font-bold text-gray-900 mb-6">Users Management</h1>
+@*
+ESTUDIANTE: Página principal de gestión de usuarios
 
-<div class="bg-white shadow rounded-lg p-6">
-    <p class="text-gray-600">
-        <!-- TODO: Implement users list functionality -->
-        Users list component will be implemented here.
-    </p>
-</div>
+INSTRUCCIONES:
+1. Esta página usa el componente UserListView
+2. El componente maneja toda la lógica de la lista
+3. Solo necesitas incluir el componente aquí
+
+OBJETIVO: Entender la separación entre páginas y componentes
+*@
+
+<UserListView />

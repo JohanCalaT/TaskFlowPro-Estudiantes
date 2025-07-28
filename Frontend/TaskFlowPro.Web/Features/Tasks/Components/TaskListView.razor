@@ -3,129 +3,56 @@
 @namespace TaskFlowPro.Web.Features.Tasks.Components
 @inherits TaskListViewBase
 
-<div class="space-y-6 animate-fadeInUp">
-    <!-- Header Section -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div class="flex items-center gap-3 animate-slideInLeft">
-            <div class="icon-container">
-                <i class="fas fa-check-square text-white"></i>
-            </div>
-            <div>
-                <h1 class="page-title">@GetTitle()</h1>
-                <div class="flex items-center gap-2">
-                    <p class="page-subtitle">@GetSubtitle()</p>
-                    <i class="fas fa-sparkles w-3 h-3 text-accent animate-pulse"></i>
-                </div>
-            </div>
-        </div>
-        
-        @if (IsTeamView && CanCreateTasks())
-        {
-            <Button Variant="Button.ButtonVariant.Primary"
-                    OnClick="HandleCreateTask"
-                    Icon="fas fa-plus"
-                    class="create-button">
-                Create Task
-            </Button>
-        }
-    </div>
+@*
+ESTUDIANTE: Vista de lista de tareas
 
-    <!-- Filters and Search -->
-    <Card HasShadow="true" IsGlass="true" IsAnimated="true">
-        <Header>
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                <div class="flex items-center gap-2 animate-slideInLeft">
-                    <i class="fas fa-check-square text-primary animate-pulse"></i>
-                    <span class="card-title">
-                        Tasks (@FilteredTasks.Count)
-                    </span>
-                    @if (FilteredTasks.Count > 0)
-                    {
-                        <div class="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-                    }
-                </div>
-                
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
-                        <Input @bind-Value="SearchTerm"
-                               @bind-Value:event="oninput"
-                               Placeholder="Search tasks..."
-                               class="pl-10 w-full sm:w-64 border-border/50 focus:border-primary transition-all duration-200" />
-                    </div>
+TAREA: Diseñar y implementar la lista de tareas usando los componentes UI disponibles
 
-                    <div class="flex gap-2">
-                        <select @bind="StatusFilter"
-                                class="px-3 py-2 border border-border/50 rounded-md focus:border-primary focus:ring-1 focus:ring-primary text-sm">
-                            <option value="all">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="completed">Completed</option>
-                            <option value="urgent">Urgent</option>
-                        </select>
+COMPONENTES DISPONIBLES:
+- <Card> - Para cada tarea (o usar TaskCard)
+- <Badge> - Para mostrar estado y prioridad
+- <Button> - Para acciones (Create, Edit, Delete, Complete)
+- <EmptyState> - Cuando no hay tareas
 
-                        @if (IsTeamView && GetTeamMembers().Any())
-                        {
-                            <select @bind="AssigneeFilter"
-                                    class="px-3 py-2 border border-border/50 rounded-md focus:border-primary focus:ring-1 focus:ring-primary text-sm">
-                                <option value="all">All Members</option>
-                                @foreach (var member in GetTeamMembers())
-                                {
-                                    <option value="@member.Id">@member.FirstName @member.LastName</option>
-                                }
-                            </select>
-                        }
-                    </div>
-                </div>
-            </div>
-        </Header>
-        
-        <ChildContent>
-            @if (IsLoading)
-            {
-                <div class="p-6">
-                    <LoadingSpinner Size="LoadingSpinner.LoadingSize.Medium"
-                                   Message="Loading tasks..." />
-                </div>
-            }
-            else if (FilteredTasks.Any())
-            {
-                <div class="divide-y divide-border/50">
-                    @foreach (var (task, index) in FilteredTasks.Select((t, i) => (t, i)))
-                    {
-                        <TaskCard Task="task"
-                                Index="index"
-                                OnEdit="HandleEditTask"
-                                OnDelete="HandleDeleteTask"
-                                OnStatusToggle="HandleStatusToggle"
-                                CanEdit="@CanEditTasks()"
-                                AssignedUser="@GetAssignedUser(task.AssignedTo)"
-                                AssignedByUser="@GetAssignedByUser(task.AssignedBy)"
-                                IsTeamView="@IsTeamView" />
-                    }
-                </div>
-            }
-            else
-            {
-                <EmptyState Icon="fas fa-check-square"
-                          Title="@GetEmptyStateTitle()"
-                          Description="@GetEmptyStateDescription()"
-                          Size="EmptyState.EmptyStateSize.Medium">
-                    <ChildContent>
-                        @if (IsTeamView && CanCreateTasks())
-                        {
-                            <div class="mt-6">
-                                <Button Variant="Button.ButtonVariant.Primary"
-                                        OnClick="HandleCreateTask"
-                                        Icon="fas fa-plus">
-                                    Create First Task
-                                </Button>
-                            </div>
-                        }
-                    </ChildContent>
-                </EmptyState>
-            }
-        </ChildContent>
-    </Card>
+DATOS DISPONIBLES en 'tasks':
+- task.Title, task.Description
+- task.Status (usar GetStatusBadgeVariant() y GetStatusDisplayName())
+- task.Priority (usar GetPriorityBadgeVariant())
+- task.AssignedTo (usar GetAssignedUserName())
+- task.CreatedAt (usar GetTimeAgo())
+- task.Id
+
+MÉTODOS DISPONIBLES:
+- GetTitle() - título dinámico según contexto
+- GetSubtitle() - subtítulo dinámico
+- IsTeamView - determina si es vista de equipo
+- CanCreateTasks() - verifica permisos
+- GetStatusBadgeVariant(status) - color del badge de estado
+- GetStatusDisplayName(status) - nombre amigable del estado
+- GetPriorityBadgeVariant(priority) - color del badge de prioridad
+- GetAssignedUserName(userId) - nombre del usuario asignado
+- GetTimeAgo(date) - tiempo relativo
+- HandleCreateTask() - crear nueva tarea
+- HandleEditTask(taskId) - editar tarea
+- HandleDeleteTask(taskId) - eliminar tarea
+- HandleCompleteTask(taskId) - marcar como completada
+
+ESTRUCTURA SUGERIDA:
+1. Header con título dinámico y botón "Create Task" (si CanCreateTasks())
+2. Grid/lista de tareas usando TaskCard o Card
+3. EmptyState cuando tasks.Any() es false
+
+TODO: ESTUDIANTE - Implementar el diseño de la lista de tareas aquí
+*@
+
+<div class="p-6">
+    <h1 class="text-2xl font-bold mb-6">@GetTitle()</h1>
+
+    @* TODO: ESTUDIANTE - Implementar lista de tareas aquí *@
+    <p class="text-gray-600">
+        Implementar lista de tareas usando componentes Card/TaskCard, Badge y Button
+    </p>
 </div>
+
 
 

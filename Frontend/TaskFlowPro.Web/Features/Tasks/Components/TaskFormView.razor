@@ -1,175 +1,40 @@
 @using TaskFlowPro.Web.Services
 @using TaskFlowPro.Web.Components.UI
-@inject IUIStateService UIState
 @namespace TaskFlowPro.Web.Features.Tasks.Components
+@inherits TaskFormViewBase
 
-<div class="space-y-6 animate-fadeInUp">
-    <!-- Header Section -->
-    <div class="flex items-center gap-3 animate-slideInLeft">
-        <Button Variant="Button.ButtonVariant.Ghost"
-                OnClick="HandleBack"
-                Icon="fas fa-arrow-left"
-                Size="Button.ButtonSize.Small"
-                class="hover:bg-primary/10 hover:text-primary" />
-        
-        <div class="icon-container">
-            <i class="fas fa-plus text-white"></i>
-        </div>
-        <div>
-            <h1 class="page-title">Create New Task</h1>
-            <p class="page-subtitle">Add a new task for your team</p>
-        </div>
-    </div>
+@*
+ESTUDIANTE: Formulario de creación/edición de tareas
 
-    <!-- Form -->
-    <Card HasShadow="true" IsGlass="true" IsAnimated="true">
-        <Header>
-            <div class="flex items-center gap-2">
-                <i class="fas fa-edit text-primary"></i>
-                <span class="card-title">Task Details</span>
-            </div>
-        </Header>
-        
-        <ChildContent>
-            <form @onsubmit="HandleSubmit" @onsubmit:preventDefault="true" class="space-y-6">
-                @if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    <div class="border border-status-urgent/20 bg-status-urgent/5 rounded-md p-3 animate-fadeInUp">
-                        <p class="text-status-urgent text-sm">
-                            <i class="fas fa-exclamation-circle mr-2"></i>
-                            @errorMessage
-                        </p>
-                    </div>
-                }
-                
-                <Input Id="title"
-                       Label="Task Title"
-                       @bind-Value="formData.Title"
-                       Placeholder="Enter task title..."
-                       LeftIcon="fas fa-tasks"
-                       IsRequired="true"
-                       Size="Input.InputSize.Large" />
-                
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-foreground/80">Description</label>
-                    <textarea @bind="formData.Description"
-                              placeholder="Enter task description..."
-                              rows="4"
-                              class="block w-full rounded-md border border-border/50 px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"></textarea>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-foreground/80">Priority</label>
-                        <select @bind="formData.Status"
-                                class="block w-full rounded-md border border-border/50 px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200">
-                            <option value="pending">Normal</option>
-                            <option value="urgent">Urgent</option>
-                        </select>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-foreground/80">Assign To</label>
-                        <select @bind="formData.AssignedTo"
-                                class="block w-full rounded-md border border-border/50 px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200">
-                            <option value="">Select team member...</option>
-                            @foreach (var member in GetTeamMembers())
-                            {
-                                <option value="@member.Id">@member.FirstName @member.LastName</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="flex gap-4 pt-4">
-                    <Button Type="submit" 
-                            Variant="Button.ButtonVariant.Primary"
-                            IsLoading="isLoading"
-                            Icon="fas fa-save"
-                            class="flex-1">
-                        @if (isLoading)
-                        {
-                            <span>Creating Task...</span>
-                        }
-                        else
-                        {
-                            <span>Create Task</span>
-                        }
-                    </Button>
-                    
-                    <Button Type="button"
-                            Variant="Button.ButtonVariant.Ghost"
-                            OnClick="HandleBack"
-                            Icon="fas fa-times">
-                        Cancel
-                    </Button>
-                </div>
-            </form>
-        </ChildContent>
-    </Card>
+TAREA: Diseñar y implementar el formulario de tarea usando los componentes UI disponibles
+
+COMPONENTES DISPONIBLES:
+- <Card> - Para el contenedor del formulario
+- <Input> - Para los campos del formulario
+- <Button> - Para acciones (Submit, Cancel, Back)
+
+CAMPOS REQUERIDOS:
+- Title (fas fa-tasks)
+- Description (fas fa-align-left)
+- Status (dropdown: pending, in_progress, completed)
+- AssignedTo (dropdown usando GetTeamMembers())
+
+MÉTODOS DISPONIBLES:
+- HandleSubmit() - para envío del formulario
+- HandleBack() - para volver atrás (navegación condicional)
+- GetTeamMembers() - para obtener miembros del equipo
+
+TODO: ESTUDIANTE - Implementar el diseño del formulario aquí
+*@
+
+<div class="p-6">
+    <h1 class="text-2xl font-bold mb-6">Create Task</h1>
+
+    @* TODO: ESTUDIANTE - Implementar formulario de tarea aquí *@
+    <p class="text-gray-600">
+        Implementar formulario de tarea usando componentes Card, Input y Button
+    </p>
 </div>
 
-@code {
-    private TaskFormData formData = new();
-    private bool isLoading = false;
-    private string errorMessage = "";
 
-    private async Task HandleSubmit()
-    {
-        errorMessage = "";
-        
-        // Validate form
-        if (string.IsNullOrWhiteSpace(formData.Title))
-        {
-            errorMessage = "Task title is required";
-            return;
-        }
-        
-        if (string.IsNullOrWhiteSpace(formData.AssignedTo))
-        {
-            errorMessage = "Please assign the task to a team member";
-            return;
-        }
-        
-        isLoading = true;
-        
-        try
-        {
-            // Simulate API call
-            await Task.Delay(1500);
-            
-            UIState.ShowSuccess("Task created successfully!");
-            HandleBack();
-        }
-        catch (Exception)
-        {
-            errorMessage = "An error occurred while creating the task";
-        }
-        finally
-        {
-            isLoading = false;
-        }
-    }
 
-    private void HandleBack()
-    {
-        var backView = UIState.CurrentUser?.Role == "team_leader" ? "team-tasks" : "my-tasks";
-        UIState.NavigateTo(backView);
-    }
-
-    private List<MockUser> GetTeamMembers()
-    {
-        if (UIState.CurrentUser?.TeamId == null) return new();
-        return MockDataService.GetMockUsers()
-            .Where(u => u.TeamId == UIState.CurrentUser.TeamId)
-            .ToList();
-    }
-
-    private class TaskFormData
-    {
-        public string Title { get; set; } = "";
-        public string Description { get; set; } = "";
-        public string Status { get; set; } = "pending";
-        public string AssignedTo { get; set; } = "";
-    }
-}

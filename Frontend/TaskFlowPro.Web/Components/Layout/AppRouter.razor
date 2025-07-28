@@ -3,9 +3,8 @@
 @using TaskFlowPro.Web.Features.Tasks.Components
 @using TaskFlowPro.Web.Features.Users.Components
 @using TaskFlowPro.Web.Features.Teams.Components
-@inject IUIStateService UIState
-@implements IDisposable
 @namespace TaskFlowPro.Web.Components.Layout
+@inherits AppRouterBase
 
 @if (UIState.CurrentUser == null)
 {
@@ -51,21 +50,4 @@ else
     }
 }
 
-@code {
-    protected override void OnInitialized()
-    {
-        UIState.OnStateChanged += StateHasChanged;
-        UIState.OnViewChanged += OnViewChanged;
-    }
 
-    public void Dispose()
-    {
-        UIState.OnStateChanged -= StateHasChanged;
-        UIState.OnViewChanged -= OnViewChanged;
-    }
-
-    private void OnViewChanged(string view)
-    {
-        StateHasChanged();
-    }
-}

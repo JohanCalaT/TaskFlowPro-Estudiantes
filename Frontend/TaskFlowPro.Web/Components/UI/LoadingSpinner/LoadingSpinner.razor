@@ -1,4 +1,5 @@
 @namespace TaskFlowPro.Web.Components.UI
+@inherits LoadingSpinnerBase
 
 <div class="@GetContainerClasses()" @attributes="AdditionalAttributes">
     @if (ShowOverlay)
@@ -25,73 +26,4 @@
     }
 </div>
 
-@code {
-    [Parameter] public LoadingSize Size { get; set; } = LoadingSize.Medium;
-    [Parameter] public LoadingVariant Variant { get; set; } = LoadingVariant.Primary;
-    [Parameter] public string? Message { get; set; }
-    [Parameter] public bool ShowOverlay { get; set; }
-    [Parameter(CaptureUnmatchedValues = true)] 
-    public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    public enum LoadingSize { Small, Medium, Large }
-    public enum LoadingVariant { Primary, Secondary, White }
-
-    private RenderFragment RenderSpinner() => __builder =>
-    {
-        <div class="@GetSpinnerClasses()">
-            <div class="@GetSpinnerInnerClasses()"></div>
-            <div class="@GetSpinnerInnerClasses()" style="animation-delay: 0.1s"></div>
-            <div class="@GetSpinnerInnerClasses()" style="animation-delay: 0.2s"></div>
-        </div>
-    };
-
-    private string GetContainerClasses()
-    {
-        return "flex items-center justify-center";
-    }
-
-    private string GetSpinnerContainerClasses()
-    {
-        return "bg-white rounded-lg p-6 shadow-xl flex flex-col items-center";
-    }
-
-    private string GetInlineContainerClasses()
-    {
-        return "flex items-center";
-    }
-
-    private string GetSpinnerClasses()
-    {
-        var baseClasses = "relative flex items-center justify-center";
-        
-        var sizeClasses = Size switch
-        {
-            LoadingSize.Small => "w-4 h-4",
-            LoadingSize.Large => "w-8 h-8",
-            _ => "w-6 h-6"
-        };
-        
-        return $"{baseClasses} {sizeClasses}";
-    }
-
-    private string GetSpinnerInnerClasses()
-    {
-        var baseClasses = "absolute rounded-full animate-pulse";
-        
-        var sizeClasses = Size switch
-        {
-            LoadingSize.Small => "w-4 h-4",
-            LoadingSize.Large => "w-8 h-8",
-            _ => "w-6 h-6"
-        };
-        
-        var colorClasses = Variant switch
-        {
-            LoadingVariant.Secondary => "bg-secondary",
-            LoadingVariant.White => "bg-white",
-            _ => "bg-primary"
-        };
-        
-        return $"{baseClasses} {sizeClasses} {colorClasses}";
-    }
-}
