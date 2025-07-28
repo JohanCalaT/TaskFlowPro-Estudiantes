@@ -1,0 +1,180 @@
+@using TaskFlowPro.Web.Services
+@using TaskFlowPro.Web.Components.UI
+@inject IUIStateService UIState
+@namespace TaskFlowPro.Web.Features.Users.Components
+
+<div class="space-y-6 animate-fadeInUp">
+    <!-- Header Section -->
+    <div class="flex items-center gap-3 animate-slideInLeft">
+        <Button Variant="Button.ButtonVariant.Ghost"
+                OnClick="HandleBack"
+                Icon="fas fa-arrow-left"
+                Size="Button.ButtonSize.Small"
+                class="hover:bg-primary/10 hover:text-primary" />
+        
+        <div class="icon-container">
+            <i class="fas fa-user-plus text-white"></i>
+        </div>
+        <div>
+            <h1 class="page-title">Add New User</h1>
+            <p class="page-subtitle">Create a new user account</p>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <Card HasShadow="true" IsGlass="true" IsAnimated="true">
+        <Header>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user text-primary"></i>
+                <span class="card-title">User Information</span>
+            </div>
+        </Header>
+        
+        <ChildContent>
+            <form @onsubmit="HandleSubmit" @onsubmit:preventDefault="true" class="space-y-6">
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="border border-status-urgent/20 bg-status-urgent/5 rounded-md p-3 animate-fadeInUp">
+                        <p class="text-status-urgent text-sm">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            @errorMessage
+                        </p>
+                    </div>
+                }
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Input Id="firstName"
+                           Label="First Name"
+                           @bind-Value="formData.FirstName"
+                           Placeholder="John"
+                           LeftIcon="fas fa-user"
+                           IsRequired="true" />
+                    
+                    <Input Id="lastName"
+                           Label="Last Name"
+                           @bind-Value="formData.LastName"
+                           Placeholder="Doe"
+                           LeftIcon="fas fa-user"
+                           IsRequired="true" />
+                </div>
+                
+                <Input Id="email"
+                       Label="Email Address"
+                       Type="email"
+                       @bind-Value="formData.Email"
+                       Placeholder="john.doe@company.com"
+                       LeftIcon="fas fa-envelope"
+                       IsRequired="true"
+                       Size="Input.InputSize.Large" />
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-foreground/80">Role</label>
+                        <select @bind="formData.Role"
+                                class="block w-full rounded-md border border-border/50 px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200">
+                            <option value="">Select role...</option>
+                            <option value="team_member">Team Member</option>
+                            <option value="team_leader">Team Leader</option>
+                            <option value="global_admin">Global Admin</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-foreground/80">Team</label>
+                        <select @bind="formData.TeamId"
+                                class="block w-full rounded-md border border-border/50 px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200">
+                            <option value="">No team assigned</option>
+                            @foreach (var team in GetTeams())
+                            {
+                                <option value="@team.Id">@team.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 pt-4">
+                    <Button Type="submit" 
+                            Variant="Button.ButtonVariant.Primary"
+                            IsLoading="isLoading"
+                            Icon="fas fa-save"
+                            class="flex-1">
+                        @if (isLoading)
+                        {
+                            <span>Creating User...</span>
+                        }
+                        else
+                        {
+                            <span>Create User</span>
+                        }
+                    </Button>
+                    
+                    <Button Type="button"
+                            Variant="Button.ButtonVariant.Ghost"
+                            OnClick="HandleBack"
+                            Icon="fas fa-times">
+                        Cancel
+                    </Button>
+                </div>
+            </form>
+        </ChildContent>
+    </Card>
+</div>
+
+@code {
+    private UserFormData formData = new();
+    private bool isLoading = false;
+    private string errorMessage = "";
+
+    private async Task HandleSubmit()
+    {
+        errorMessage = "";
+        
+        // Validate form
+        if (string.IsNullOrWhiteSpace(formData.FirstName) ||
+            string.IsNullOrWhiteSpace(formData.LastName) ||
+            string.IsNullOrWhiteSpace(formData.Email) ||
+            string.IsNullOrWhiteSpace(formData.Role))
+        {
+            errorMessage = "Please fill in all required fields";
+            return;
+        }
+        
+        isLoading = true;
+        
+        try
+        {
+            // Simulate API call
+            await Task.Delay(1500);
+            
+            UIState.ShowSuccess("User created successfully!");
+            HandleBack();
+        }
+        catch (Exception)
+        {
+            errorMessage = "An error occurred while creating the user";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void HandleBack()
+    {
+        UIState.NavigateTo("users");
+    }
+
+    private List<MockTeam> GetTeams()
+    {
+        return MockDataService.GetMockTeams();
+    }
+
+    private class UserFormData
+    {
+        public string FirstName { get; set; } = "";
+        public string LastName { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string Role { get; set; } = "";
+        public string TeamId { get; set; } = "";
+    }
+}

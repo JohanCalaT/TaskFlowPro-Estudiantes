@@ -1,273 +1,164 @@
-# 👥 TaskFlowPro - Proyecto para Estudiantes
+﻿# 🚀 TaskFlowPro - Sistema de Gestión de Tareas
 
 ## 📋 Descripción del Proyecto
 
-¡Bienvenidos al proyecto **TaskFlowPro**! 🎉
+**TaskFlowPro** es un sistema completo de gestión de tareas y equipos desarrollado con **.NET 9**, **Blazor Server** y **Tailwind CSS**. Una aplicación moderna para organizar equipos, asignar tareas y gestionar proyectos de manera eficiente.
 
-En este proyecto desarrollarás un sistema completo de gestión de tareas y equipos utilizando las tecnologías más modernas de **.NET 9**. Aprenderás a implementar **Arquitectura Limpia**, trabajar con **Entity Framework Core**, crear APIs REST y desarrollar interfaces con **Blazor**.
+## 🎯 Características Principales
 
-## 🎯 Objetivos de Aprendizaje
+- ✅ **Gestión de Tareas** - Crear, asignar y seguir el progreso de tareas
+- ✅ **Equipos de Trabajo** - Organizar usuarios en equipos colaborativos
+- ✅ **Roles y Permisos** - Sistema de autenticación con diferentes niveles de acceso
+- ✅ **Interfaz Moderna** - Diseño responsive con Tailwind CSS
+- ✅ **Tiempo Real** - Actualizaciones en vivo con Blazor Server
 
-Al completar este proyecto, habrás aprendido:
+## 🛠️ Tecnologías Utilizadas
 
-- ✅ **Arquitectura Limpia** - Separación de responsabilidades
-- ✅ **Entity Framework Core** - ORM y manejo de base de datos
-- ✅ **API REST** - Creación de endpoints y documentación
-- ✅ **Autenticación JWT** - Seguridad en aplicaciones web
-- ✅ **Blazor Server** - Desarrollo de interfaces interactivas
-- ✅ **Aspire** - Orquestación y observabilidad
-- ✅ **Patrones de Diseño** - Repository, Unit of Work, CQRS
-- ✅ **Mejores Prácticas** - Clean Code y SOLID
+- **.NET 9** - Framework principal
+- **Blazor Server** - Frontend interactivo
+- **Tailwind CSS** - Framework de estilos utilitarios
+- **Entity Framework Core** - ORM para base de datos
+- **Clean Architecture** - Patrón arquitectónico
+- **Font Awesome** - Iconografía
 
-## 🏗️ Arquitectura del Proyecto
+## 🚀 Configuración e Instalación
 
-```
-📁 TaskFlowPro/
-├── 📁 Backend/
-│   ├── 📁 TaskFlowPro.Domain/          # 🏛️ Entidades y reglas de negocio
-│   ├── 📁 TaskFlowPro.Application/     # 🎯 Casos de uso y DTOs
-│   ├── 📁 TaskFlowPro.Persistence/     # 💾 Entity Framework y repositorios
-│   └── 📁 TaskFlowPro.Api/             # 🌐 Controllers y configuración API
-├── 📁 Frontend/
-│   └── 📁 TaskFlowPro.Web/             # 🖥️ Aplicación Blazor Server
-├── 📁 Orchestration/
-│   ├── 📁 TaskFlowPro.AppHost/         # 🎭 Aspire App Host
-│   └── 📁 TaskFlowPro.ServiceDefaults/ # ⚙️ Configuraciones compartidas
-└── 📁 Database/
-    └── 📁 TaskFlowPro-Database-Kit/    # 🗄️ Scripts de base de datos
-```
-
-## 📋 Prerrequisitos
-
+### **Prerrequisitos**
 Antes de comenzar, asegúrate de tener instalado:
 
 - **.NET 9 SDK** - [Descargar aquí](https://dotnet.microsoft.com/download/dotnet/9.0)
-- **SQL Server** (LocalDB, Express o completo)
+- **Node.js 18+** - [Descargar aquí](https://nodejs.org/) (necesario para Tailwind CSS)
 - **Visual Studio 2022** o **Visual Studio Code**
 - **Git** para clonar el repositorio
 
-## 🚀 Configuración Inicial
-
 ### **Paso 1: Clonar el Repositorio**
-
 ```bash
-git clone https://github.com/JohanCalaT/TaskFlowPro-Estudiantes.git
+git clone [URL_DEL_REPOSITORIO]
 cd TaskFlowPro-Estudiantes
 ```
 
-### **Paso 2: ⚠️ CONFIGURAR BASE DE DATOS (OBLIGATORIO)**
-
-**🔴 IMPORTANTE:** Antes de hacer cualquier otra cosa, debes configurar la base de datos siguiendo las instrucciones del archivo:
-
-📁 **`Database/TaskFlowPro-Database-Kit/README.md`**
-
-Este archivo contiene:
-- 📝 **Instrucciones paso a paso** para configurar SQL Server
-- 🗄️ **Scripts de creación** de base de datos
-- 🌱 **Datos de prueba** (usuarios, roles, equipos)
-- 🔗 **Configuración de conexión**
-- 🛠️ **Solución de problemas** comunes
-
-**⚠️ NO CONTINÚES sin completar este paso primero.**
-
-### **Paso 3: Configurar Cadena de Conexión**
-
-Edita el archivo `Backend/TaskFlowPro.Api/appsettings.json` con tus credenciales:
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=TaskFlowProDB;User Id=sa;Password=TU_PASSWORD;TrustServerCertificate=true;MultipleActiveResultSets=true"
-  }
-}
-```
-
-### **Paso 4: Restaurar Paquetes**
-
+### **Paso 2: Restaurar Dependencias de .NET**
 ```bash
 dotnet restore
 ```
 
-### **Paso 5: Verificar Configuración**
+### **Paso 3: Configurar Tailwind CSS**
+```bash
+# Navegar al directorio del frontend
+cd Frontend/TaskFlowPro.Web
 
-Ejecuta la aplicación para verificar que todo funciona:
+# Instalar dependencias de Node.js
+npm install
+
+# Compilar estilos de Tailwind CSS
+npm run build-css
+```
+
+### **Paso 4: Ejecutar la Aplicación**
+```bash
+# Desde el directorio Frontend/TaskFlowPro.Web
+dotnet run --urls "https://localhost:7001"
+```
+
+### **Paso 5: Abrir en el Navegador**
+Abre tu navegador y ve a: **https://localhost:7001**
+
+## 🔧 Desarrollo con Tailwind CSS
+
+Para desarrollo activo con recompilación automática de estilos:
+
+### **Opción 1: Script Automático (Recomendado)**
+```bash
+cd Frontend/TaskFlowPro.Web
+.\start-dev.ps1
+```
+
+### **Opción 2: Manual (2 terminales)**
+```bash
+# Terminal 1 - Tailwind Watch (detecta cambios automáticamente)
+cd Frontend/TaskFlowPro.Web
+npx tailwindcss -i ./Styles/app.css -o ./wwwroot/css/app.css --watch
+
+# Terminal 2 - Aplicación Blazor
+cd Frontend/TaskFlowPro.Web
+dotnet run --urls "https://localhost:7001"
+```
+
+**Nota**: El modo watch de Tailwind detecta cambios en archivos `.razor` y recompila automáticamente los estilos.
+
+## 🎨 Sistema de Diseño
+
+### **Colores Principales**
+```css
+--primary: #0891b2;     /* Teal vibrante */
+--secondary: #f97316;   /* Naranja cálido */
+--accent: #65a30d;      /* Verde lima */
+```
+
+### **Estructura del Proyecto**
+```
+📁 TaskFlowPro.Web/
+├── 📁 Components/
+│   ├── 📁 UI/              # Componentes reutilizables
+│   └── 📁 Layout/          # Componentes de layout
+├── 📁 Features/            # Funcionalidades por módulo
+│   ├── 📁 Auth/            # Autenticación
+│   ├── 📁 Tasks/           # Gestión de tareas
+│   ├── 📁 Users/           # Gestión de usuarios
+│   └── 📁 Teams/           # Gestión de equipos
+├── 📁 Services/            # Servicios de la aplicación
+├── 📁 Styles/              # Archivos fuente de Tailwind
+└── 📁 wwwroot/             # Archivos estáticos
+```
+
+## 🔧 Comandos Útiles
 
 ```bash
-dotnet run --project Orchestration/TaskFlowPro.AppHost/TaskFlowPro.AppHost.csproj
-```
+# Compilar estilos una sola vez
+npm run build-css
 
-Luego visita: `https://localhost:7001/api/users/test-connection`
-
-Si ves un mensaje de éxito, ¡estás listo para comenzar! 🎉
-
-## 📚 Ejercicios y TODOs
-
-Este proyecto contiene ejercicios marcados con comentarios `// TODO:` que debes completar. Los ejercicios están organizados por dificultad:
-
-### **🟢 Nivel Básico**
-- Implementar métodos CRUD básicos
-- Configurar AutoMapper profiles
-- Crear validaciones simples
-
-### **🟡 Nivel Intermedio**
-- Implementar autenticación JWT
-- Crear filtros y búsquedas
-- Manejar relaciones entre entidades
-
-### **🔴 Nivel Avanzado**
-- Implementar patrones de diseño
-- Crear middleware personalizado
-- Optimizar consultas de base de datos
-
-## 🛠️ Cómo Ejecutar el Proyecto
-
-### **Opción 1: Con Aspire (Recomendado)**
-
-```bash
-dotnet run --project Orchestration/TaskFlowPro.AppHost/TaskFlowPro.AppHost.csproj
-```
-
-Esto abrirá:
-- 🎭 **Aspire Dashboard** - Panel de control
-- 🌐 **API** - `https://localhost:7001`
-- 🖥️ **Blazor Web** - `https://localhost:7002`
-
-### **Opción 2: Solo API**
-
-```bash
-dotnet run --project Backend/TaskFlowPro.Api/TaskFlowPro.Api.csproj
-```
-
-### **Opción 3: Solo Frontend**
-
-```bash
-dotnet run --project Frontend/TaskFlowPro.Web/TaskFlowPro.Web.csproj
-```
-
-## 📖 Documentación de API
-
-Una vez ejecutada la aplicación:
-
-- **Scalar Documentation**: `https://localhost:7001/scalar/v1`
-- **Swagger UI**: `https://localhost:7001/swagger`
-
-## 🧪 Endpoints de Prueba
-
-### **Verificar Conexión**
-```
-GET /api/users/test-connection
-```
-
-### **Autenticación**
-```
-POST /api/auth/login
-POST /api/auth/register
-```
-
-### **Gestión de Usuarios**
-```
-GET /api/users
-POST /api/users
-PUT /api/users/{id}
-DELETE /api/users/{id}
-```
-
-## 📝 Guía de Desarrollo
-
-### **1. Estructura de Carpetas**
-
-Cada capa tiene una responsabilidad específica:
-
-- **Domain**: Entidades y reglas de negocio
-- **Application**: Casos de uso, DTOs y servicios
-- **Persistence**: Acceso a datos con Entity Framework
-- **Api**: Controllers y configuración web
-
-### **2. Patrones Implementados**
-
-- **Repository Pattern**: Para acceso a datos
-- **Unit of Work**: Para transacciones
-- **Dependency Injection**: Para inversión de control
-- **AutoMapper**: Para mapeo de objetos
-
-### **3. Convenciones de Código**
-
-- Usar **PascalCase** para clases y métodos
-- Usar **camelCase** para variables
-- Agregar comentarios XML para documentación
-- Seguir principios **SOLID**
-
-## 🎯 Entregables
-
-### **Entrega 1: Configuración Base**
-- [ ] Configurar base de datos
-- [ ] Ejecutar aplicación exitosamente
-- [ ] Probar endpoint de conexión
-
-### **Entrega 2: API Básica**
-- [ ] Implementar CRUD de usuarios
-- [ ] Configurar AutoMapper
-- [ ] Crear validaciones
-
-### **Entrega 3: Autenticación**
-- [ ] Implementar JWT
-- [ ] Crear middleware de autenticación
-- [ ] Proteger endpoints
-
-### **Entrega 4: Funcionalidades Avanzadas**
-- [ ] Gestión de equipos
-- [ ] Gestión de tareas
-- [ ] Dashboard con estadísticas
-
-## 🆘 Ayuda y Recursos
-
-### **Documentación Útil**
-- [.NET 9 Documentation](https://docs.microsoft.com/dotnet/)
-- [Entity Framework Core](https://docs.microsoft.com/ef/core/)
-- [Blazor Documentation](https://docs.microsoft.com/aspnet/core/blazor/)
-
-### **Solución de Problemas Comunes**
-
-**Error de conexión a base de datos:**
-1. Verificar que SQL Server esté ejecutándose
-2. Revisar credenciales en `appsettings.json`
-3. Ejecutar `/api/users/test-connection`
-
-**Error de compilación:**
-```bash
+# Limpiar y reconstruir proyecto
 dotnet clean
-dotnet restore
 dotnet build
+
+# Restaurar paquetes NuGet
+dotnet restore
+
+# Reinstalar dependencias de Node.js
+rm -rf node_modules package-lock.json
+npm install
 ```
 
-**Puerto en uso:**
-Cambiar puertos en `launchSettings.json`
+## 🐛 Solución de Problemas
 
-## 📞 Soporte
+### **Los estilos no se cargan**
+1. Verificar que `wwwroot/css/app.css` existe
+2. Ejecutar `npm run build-css`
+3. Limpiar caché del navegador (Ctrl+F5)
 
-¿Necesitas ayuda?
+### **Error al compilar Tailwind**
+1. Verificar que Node.js está instalado: `node --version`
+2. Reinstalar dependencias: `npm install`
+3. Ejecutar manualmente: `npx tailwindcss -i ./Styles/app.css -o ./wwwroot/css/app.css`
 
-- 💬 **Crear Issue** en este repositorio
-- 📧 **Email al profesor**: [profesor@universidad.edu]
-- 👥 **Foro de la clase**: [enlace-al-foro]
+### **Puerto en uso**
+Si el puerto 7001 está ocupado, cambiar en el comando:
+```bash
+dotnet run --urls "https://localhost:7002"
+```
 
-## 🏆 Criterios de Evaluación
+## 📚 Recursos Adicionales
 
-- **Funcionalidad** (40%): ¿El código funciona correctamente?
-- **Calidad de Código** (30%): ¿Sigue buenas prácticas?
-- **Arquitectura** (20%): ¿Respeta la arquitectura limpia?
-- **Documentación** (10%): ¿Está bien documentado?
+- **Blazor**: [Documentación oficial](https://docs.microsoft.com/en-us/aspnet/core/blazor/)
+- **Tailwind CSS**: [Documentación](https://tailwindcss.com/docs)
+- **Font Awesome**: [Iconos](https://fontawesome.com/icons)
 
-## 🎉 ¡Comienza tu Aventura!
+##  Funcionalidades del Sistema
 
-¡Estás listo para comenzar! Recuerda:
+- **Dashboard** - Vista general de tareas y equipos
+- **Gestión de Tareas** - CRUD completo de tareas
+- **Gestión de Usuarios** - Administración de usuarios y roles
+- **Gestión de Equipos** - Organización de equipos de trabajo
+- **Autenticación** - Sistema de login con roles diferenciados
 
-1. 📖 **Lee toda la documentación** antes de empezar
-2. 🗄️ **Configura la base de datos** siguiendo el kit
-3. 🧪 **Prueba cada funcionalidad** que implementes
-4. 💬 **Pregunta si tienes dudas**
-5. 🎯 **Diviértete aprendiendo**
-
----
-
-**¡Buena suerte y que disfrutes programando! 🚀**
+¡Disfruta desarrollando con TaskFlowPro! 

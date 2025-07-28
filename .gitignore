@@ -556,3 +556,10 @@ Thumbs.db
 # Custom project files
 appsettings.local.json
 appsettings.*.local.json
+
+# Augment AI Assistant files
+.augment/
+augment_rules.md
+CODE_TEMPLATES.md
+.augment_*
+*_augment_*

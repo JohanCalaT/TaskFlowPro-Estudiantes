@@ -1,0 +1,232 @@
+@using TaskFlowPro.Web.Services
+@using TaskFlowPro.Web.Components.UI
+@inject IUIStateService UIState
+@namespace TaskFlowPro.Web.Features.Auth.Components
+
+<div class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <Card HasShadow="true" 
+          IsGlass="true" 
+          IsAnimated="true"
+          CustomClass="w-full max-w-md shadow-2xl border-0 bg-white/80 backdrop-blur-sm animate-scaleIn">
+        <Header>
+            <div class="text-center space-y-4">
+                <div class="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                        <div class="w-4 h-4 bg-gradient-to-br from-primary to-secondary rounded-sm"></div>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        TaskFlow Pro
+                    </h1>
+                    <p class="text-base text-muted-foreground">
+                        Welcome back! Sign in to your account
+                    </p>
+                </div>
+            </div>
+        </Header>
+        
+        <ChildContent>
+            <form @onsubmit="HandleSubmit" @onsubmit:preventDefault="true" class="space-y-6">
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="border border-status-urgent/20 bg-status-urgent/5 rounded-md p-3 animate-fadeInUp">
+                        <p class="text-status-urgent text-sm">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            @errorMessage
+                        </p>
+                    </div>
+                }
+                
+                <Input Id="email"
+                       Label="Email"
+                       Type="email"
+                       @bind-Value="formData.Email"
+                       Placeholder="Enter your email"
+                       LeftIcon="fas fa-envelope"
+                       IsRequired="true"
+                       Size="Input.InputSize.Large" />
+                
+                <Input Id="password"
+                       Label="Password"
+                       Type="@(showPassword ? "text" : "password")"
+                       @bind-Value="formData.Password"
+                       Placeholder="Enter your password"
+                       LeftIcon="fas fa-lock"
+                       RightIcon="@(showPassword ? "fas fa-eye-slash" : "fas fa-eye")"
+                       OnRightIconClick="TogglePasswordVisibility"
+                       IsRequired="true"
+                       Size="Input.InputSize.Large" />
+                
+                <Button Type="submit"
+                        Variant="Button.ButtonVariant.Primary"
+                        Size="Button.ButtonSize.Large"
+                        IsLoading="isLoading"
+                        class="w-full h-12 !rounded-xl">
+                    @if (isLoading)
+                    {
+                        <span>Signing in...</span>
+                    }
+                    else
+                    {
+                        <span>Sign In</span>
+                    }
+                </Button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-muted-foreground">
+                    Don't have an account?
+                    <button @onclick="OnSwitchToRegister"
+                            class="text-primary hover:text-primary/80 transition-colors duration-200 underline underline-offset-4 ml-1">
+                        Create account
+                    </button>
+                </p>
+            </div>
+            
+            <div class="mt-6 p-4 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl border border-primary/10">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="fas fa-info-circle text-primary"></i>
+                    <p class="text-sm font-medium text-primary">Demo Credentials</p>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between items-center p-2 bg-white/50 rounded-lg">
+                        <div>
+                            <p class="font-medium">Global Admin</p>
+                            <p class="text-muted-foreground">admin@taskflow.com</p>
+                        </div>
+                        <Badge Variant="Badge.BadgeVariant.Danger" Size="Badge.BadgeSize.Small">Admin</Badge>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-white/50 rounded-lg">
+                        <div>
+                            <p class="font-medium">Team Leader</p>
+                            <p class="text-muted-foreground">leader@taskflow.com</p>
+                        </div>
+                        <Badge Variant="Badge.BadgeVariant.Warning" Size="Badge.BadgeSize.Small">Leader</Badge>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-white/50 rounded-lg">
+                        <div>
+                            <p class="font-medium">Team Member</p>
+                            <p class="text-muted-foreground">member@taskflow.com</p>
+                        </div>
+                        <Badge Variant="Badge.BadgeVariant.Primary" Size="Badge.BadgeSize.Small">Member</Badge>
+                    </div>
+                    <p class="text-center text-muted-foreground mt-2 italic">Password: any text</p>
+                </div>
+            </div>
+        </ChildContent>
+    </Card>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnSwitchToRegister { get; set; }
+    
+    private LoginFormData formData = new();
+    private bool showPassword = false;
+    private bool isLoading = false;
+    private string errorMessage = "";
+
+    private async Task HandleSubmit()
+    {
+        errorMessage = "";
+        isLoading = true;
+        
+        try
+        {
+            // Simulate API call
+            await Task.Delay(1000);
+            
+            // Mock authentication logic
+            var user = GetMockUser(formData.Email);
+            if (user != null)
+            {
+                UIState.SetCurrentUser(user);
+
+                // Navigate to appropriate view based on role
+                var defaultView = user.Role switch
+                {
+                    "global_admin" => "users",
+                    "team_leader" => "team-tasks",
+                    "team_member" => "my-tasks",
+                    _ => "my-tasks"
+                };
+
+                UIState.NavigateTo(defaultView);
+                UIState.ShowSuccess($"Welcome back, {user.FirstName}! Redirecting to {GetViewDisplayName(defaultView)}...");
+            }
+            else
+            {
+                errorMessage = "Invalid email or password";
+            }
+        }
+        catch (Exception)
+        {
+            errorMessage = "An error occurred during sign in";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void TogglePasswordVisibility()
+    {
+        showPassword = !showPassword;
+    }
+
+    private string GetViewDisplayName(string view)
+    {
+        return view switch
+        {
+            "users" => "User Management",
+            "teams" => "Team Management",
+            "team-tasks" => "Team Tasks",
+            "my-tasks" => "My Tasks",
+            _ => view
+        };
+    }
+
+    private MockUser? GetMockUser(string email)
+    {
+        return email.ToLower() switch
+        {
+            "admin@taskflow.com" => new MockUser
+            {
+                Id = "1",
+                FirstName = "Admin",
+                LastName = "User",
+                Email = email,
+                Role = "global_admin",
+                TeamId = null,
+                TeamName = null
+            },
+            "leader@taskflow.com" => new MockUser
+            {
+                Id = "2",
+                FirstName = "Team",
+                LastName = "Leader",
+                Email = email,
+                Role = "team_leader",
+                TeamId = "team1",
+                TeamName = "Development Team"
+            },
+            "member@taskflow.com" => new MockUser
+            {
+                Id = "3",
+                FirstName = "Team",
+                LastName = "Member",
+                Email = email,
+                Role = "team_member",
+                TeamId = "team1",
+                TeamName = "Development Team"
+            },
+            _ => null
+        };
+    }
+
+    private class LoginFormData
+    {
+        public string Email { get; set; } = "";
+        public string Password { get; set; } = "";
+    }
+}

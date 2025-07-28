@@ -1,0 +1,80 @@
+@using TaskFlowPro.Web.Services
+@using TaskFlowPro.Web.Components.UI
+@namespace TaskFlowPro.Web.Features.Tasks.Components
+@inherits TaskCardBase
+
+<div class="@GetTaskCardClasses()"
+     style="animation-delay: @(Index * 50)ms">
+
+    @if (IsCompleting)
+    {
+        <div class="absolute inset-0 bg-gradient-to-r from-status-completed/10 via-status-completed/20 to-status-completed/10 animate-shimmer"></div>
+    }
+
+    <div class="flex items-start gap-4 relative z-10">
+        <!-- Checkbox -->
+        <div class="flex-shrink-0 pt-1">
+            <input type="checkbox"
+                   checked="@(Task.Status == "completed")"
+                   @onchange="HandleStatusToggle"
+                   class="@GetCheckboxClasses()" />
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex-1">
+                    <h3 class="@GetTitleClasses()">@Task.Title</h3>
+
+                    @if (!string.IsNullOrEmpty(Task.Description))
+                    {
+                        <p class="text-sm text-muted-foreground mt-1 line-clamp-2">@Task.Description</p>
+                    }
+
+                    <!-- Badges and Info -->
+                    <div class="flex items-center gap-4 mt-3">
+                        <Badge Variant="@GetStatusBadgeVariant()"
+                               Icon="@GetStatusIcon()"
+                               IsAnimated="true"
+                               class="@GetStatusBadgeClasses()">
+                            @GetStatusDisplayName()
+                        </Badge>
+
+                        @if (AssignedUser != null)
+                        {
+                            <div class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
+                                <Avatar Initials="@GetUserInitials(AssignedUser)"
+                                        Size="Avatar.AvatarSize.Small"
+                                        IsAnimated="true" />
+                                <span>@GetUserDisplayText()</span>
+                            </div>
+                        }
+
+                        <div class="text-xs text-muted-foreground">
+                            <i class="fas fa-clock mr-1"></i>
+                            @GetTimeAgo()
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <Button Variant="Button.ButtonVariant.Ghost"
+                            Size="Button.ButtonSize.Small"
+                            Icon="fas fa-edit"
+                            OnClick="() => OnEdit.InvokeAsync(Task.Id)"
+                            class="hover:bg-primary/10 hover:text-primary transition-all duration-200 hover:scale-105 hover:shadow-md" />
+
+                    @if (CanEdit)
+                    {
+                        <Button Variant="Button.ButtonVariant.Ghost"
+                                Size="Button.ButtonSize.Small"
+                                Icon="fas fa-trash"
+                                OnClick="HandleDelete"
+                                class="hover:bg-status-urgent/10 hover:text-status-urgent transition-all duration-200 hover:scale-105 hover:shadow-md" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
