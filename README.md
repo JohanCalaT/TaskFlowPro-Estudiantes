@@ -1,4 +1,16 @@
-﻿# 🚀 TaskFlowPro - Sistema de Gestión de Tareas
+﻿# 🚀 TaskFlowPro - Template Educativo
+
+## 🎓 Para Estudiantes
+
+**Este es un TEMPLATE REPOSITORY.** Para crear tu proyecto personal:
+
+1. **Hacer clic en "Use this template"** (botón verde arriba)
+2. **Crear tu repositorio personal**
+3. **Seguir las instrucciones:** [📋 COMO-USAR-TEMPLATE.md](COMO-USAR-TEMPLATE.md)
+
+**⚠️ NO clones este repositorio directamente. Usa el template para crear el tuyo.**
+
+---
 
 ## 📋 Descripción del Proyecto
 
